@@ -18,7 +18,10 @@ interface IState {
     totalResults: number | null;
     errors: IError | null;
     isLoading: boolean
+    selectedMovies: IMovie[]
+    isExist: number
 }
+
 
 const initialState: IState = {
     page: 0,
@@ -27,7 +30,9 @@ const initialState: IState = {
     totalPages: 0,
     totalResults: null,
     errors: null,
-    isLoading: false
+    isLoading: false,
+    selectedMovies: [],
+    isExist: 0
 };
 
 const getAll = createAsyncThunk<IMovieResponse, number, { rejectValue: AxiosError<unknown, any> }>(
@@ -59,11 +64,21 @@ const search = createAsyncThunk<IMovieResponse, string>('moviesSlice/search', as
 const slice = createSlice({
     name: "moviesSlice",
     initialState,
-    reducers: {},
+    reducers: {
+        setSelectMovie: (state: IState, action: PayloadAction<IMovie>) => {
+            state.selectedMovies.push(action.payload)
+        },
+        deleteMovie: (state: IState, action: PayloadAction<number>) => {
+            const movieIndex = state.selectedMovies.findIndex((value) => value.id === action.payload);
+            state.selectedMovies.splice(movieIndex, 1);
+        },
+        setIsExist: (state: IState, action: PayloadAction<number>) => {
+            state.isExist = action.payload
+        }
+    },
     extraReducers: (builder) =>
         builder
             .addCase(getAll.fulfilled, (state: IState, action: PayloadAction<IMovieResponse>) => {
-                state.isLoading = false
                 state.page = action.payload.page;
                 state.totalPages = action.payload.total_pages;
                 state.totalResults = action.payload.total_results;
@@ -74,7 +89,6 @@ const slice = createSlice({
                 state.isLoading = true
             })
             .addCase(search.fulfilled, (state: IState, action: PayloadAction<IMovieResponse>) => {
-                state.isLoading = false
                 state.page = action.payload.page;
                 state.totalPages = action.payload.total_pages;
                 state.totalResults = action.payload.total_results;

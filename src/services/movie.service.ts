@@ -1,6 +1,6 @@
 
 
-import { IMovieResponse} from "../interfaces";
+import {IMovieResponse, IVideoResponse} from "../interfaces";
 import {axiosInstance} from "./axios.service";
 
 
@@ -17,9 +17,10 @@ const moviesService = {
         }
     },
 
-    byId: async (id:number):Promise<IMovieResponse> => {
+
+    videoById: async (id:number):Promise<IVideoResponse> => {
         try {
-            const response = await axiosInstance.get(`/discover/movie?id=${id}`);
+            const response = await axiosInstance.get(`/movie/${id}/videos`);
             return response.data;
         } catch (error) {
             console.error('Помилка при отриманні фільмів:', error);

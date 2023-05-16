@@ -1,17 +1,19 @@
 import {FC, useEffect} from 'react';
 import {Box, Grid} from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import * as React from "react";
+
 import {movieActions} from "../../redux";
 import {MovieCard} from "../MovieCard";
 import {PaginationControlled} from "../Pagination";
-import * as React from "react";
 import {MyLoader} from "../Loader";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 
 interface IProps {
 }
 
 const MoviesList: FC<IProps> = () => {
     const {results, isLoading} = useAppSelector((state) => state.movieReducer);
+
     const [page, setPage] = React.useState(1);
 
     const dispatch = useAppDispatch();

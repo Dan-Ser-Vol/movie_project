@@ -2,8 +2,9 @@ import React, {FC} from "react";
 import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack';
-import {useAppSelector} from "../../hooks";
 import {Box} from "@mui/material";
+
+import {useAppSelector} from "../../hooks";
 
 interface IProps {
     page: number
@@ -20,10 +21,10 @@ const PaginationControlled:FC<IProps> = ({ page ,setPage}) => {
 
     return (
         <Stack spacing={2}>
-            <Typography variant={"h4"} mt={2} color={"white"} fontWeight={"bold"}>Page: {page}</Typography>
+            <Typography variant={"h5"} mt={2} color={"gray"} fontWeight={"bold"}>Page: {page}</Typography>
       <Box>
           <Pagination
-              count={totalPages}
+              count={500}
               page={page}
               onChange={handleChange}
               variant="outlined"

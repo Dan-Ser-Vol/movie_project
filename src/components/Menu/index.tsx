@@ -28,7 +28,7 @@ const LongMenu: FC<IProps> = ({children}) => {
     return (
         <div>
             <IconButton
-                sx={{color: 'white', backgroundColor: '#afa89f', opacity: '60%'}}
+                sx={{color: 'black', backgroundColor: '#afa89f', opacity: '60%'}}
                 aria-label="more"
                 id="long-button"
                 aria-controls={open ? 'long-menu' : undefined}
@@ -46,6 +46,7 @@ const LongMenu: FC<IProps> = ({children}) => {
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
+                onClick={handleClose}
                 PaperProps={{
                     style: {
                         maxHeight: ITEM_HEIGHT * 4.5,
