@@ -1,7 +1,7 @@
 import React, {FC, ReactNode} from "react";
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import InfoIcon from '@mui/icons-material/Info';
 
 import Menu from '@mui/material/Menu';
 
@@ -28,7 +28,7 @@ const LongMenu: FC<IProps> = ({children}) => {
     return (
         <div>
             <IconButton
-                sx={{color: 'black', backgroundColor: '#afa89f', opacity: '60%'}}
+                sx={{color: '#627BCC', backgroundColor: '#afa89f', opacity: '60%'}}
                 aria-label="more"
                 id="long-button"
                 aria-controls={open ? 'long-menu' : undefined}
@@ -36,7 +36,7 @@ const LongMenu: FC<IProps> = ({children}) => {
                 aria-haspopup="true"
                 onClick={handleClick}
             >
-                <MoreVertIcon/>
+                <InfoIcon/>
             </IconButton>
             <Menu
                 id="long-menu"
@@ -49,8 +49,9 @@ const LongMenu: FC<IProps> = ({children}) => {
                 onClick={handleClose}
                 PaperProps={{
                     style: {
-                        maxHeight: ITEM_HEIGHT * 4.5,
-                        width: '20ch',
+                        backgroundColor: '#DEDEE2',
+                        maxHeight: ITEM_HEIGHT * 6.5,
+                        width: '50ch',
                     },
                 }}
             >

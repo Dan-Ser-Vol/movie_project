@@ -10,6 +10,7 @@ import {Link as RouterLink} from "react-router-dom";
 
 import {MySearch} from "../Search";
 import {Switcher} from "../Switcher";
+import {BackButton} from "../BackButton";
 
 interface IProps {
     onThemeChange: () => void
@@ -37,7 +38,7 @@ const Header: FC<IProps> = ({onThemeChange}) => {
                                         fontFamily: 'monospace',
                                         fontWeight: 700,
                                         letterSpacing: '.2rem',
-                                        color: 'inherit',
+                                        color: '#EF9947',
                                         textDecoration: 'none',
                                         textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
                                     }}
@@ -57,12 +58,14 @@ const Header: FC<IProps> = ({onThemeChange}) => {
                         </Grid>
                         <Grid item xs={12} md={2} sx={{display: 'flex', justifyContent: 'center'}}>
                             <Box>
-                                <Typography sx={{margin: '10px'}}>User</Typography>
+                                <Typography sx={{margin: '10px 20px'}}>User</Typography>
                             </Box>
                             <Box>
                                 <Avatar alt="Avatar"
-                                        src="https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj"/>
+                                        src="https://avatars.mds.yandex.net/get-kino-vod-films-gallery/28788/47e2fd514411e18b76af786d7417062d/100x64_3"/>
                             </Box>
+
+                            <BackButton/>
                         </Grid>
                     </Grid>
 

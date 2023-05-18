@@ -1,7 +1,18 @@
 
 
+
+body {
+    background-image: url('https://storage.googleapis.com/cre8tiveai_public_files/img/home/home_head_parallax.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+
 .genre-buttons{
     display: flex;
     flex-wrap: wrap;
     max-width: 100%;
+}
+.active {
+    background-color: chocolate;
 }

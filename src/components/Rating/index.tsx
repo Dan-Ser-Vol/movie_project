@@ -1,10 +1,17 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
-const MyRating = () => {
+import {FC} from "react";
+
+
+interface IProps {
+    rating: number
+}
+
+const MyRating:FC<IProps> = ({rating}) => {
     return (
         <Box>
-            <Rating name="customized-10" defaultValue={2} max={10} />
+            <Rating name="customized-10" defaultValue={rating} max={20} />
         </Box>
     );
 }

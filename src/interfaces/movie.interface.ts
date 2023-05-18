@@ -41,10 +41,3 @@ export interface IMovieResponse {
    total_pages: number
    total_results: number
 }
-
-
-
-export interface IGenre {
-     id: number;
-     name: string;
- }

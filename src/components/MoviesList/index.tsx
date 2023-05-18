@@ -8,20 +8,21 @@ import {PaginationControlled} from "../Pagination";
 import {MyLoader} from "../Loader";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 
+
 interface IProps {
 }
 
 const MoviesList: FC<IProps> = () => {
-    const {results, isLoading} = useAppSelector((state) => state.movieReducer);
-
-    const [page, setPage] = React.useState(1);
-
+    const {results, isLoading, totalPages, page} = useAppSelector((state) => state.movieReducer);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(movieActions.getAll(page));
-    }, [dispatch, page]);
+    }, [dispatch ,page]);
 
+
+    const setPages =  (pages:number) => {
+        dispatch( movieActions.setPage(pages))
+    }
 
     return (
         <Box sx={{padding: '10px'}}>
@@ -41,7 +42,7 @@ const MoviesList: FC<IProps> = () => {
             }
 
             <Box>
-                <PaginationControlled page={page} setPage={setPage}/>
+                <PaginationControlled page={page} setPage={setPages} totalPages={totalPages}/>
             </Box>
         </Box>
     );
