@@ -4,7 +4,6 @@ import {Box, Grid, Paper, styled} from "@mui/material";
 import {GenreFilter, MoviesList} from "../../components";
 import YearsInput from "../../components/YearsInput";
 import {CheckGenre} from "../../components";
-import {genres} from "../../utils/differentData";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {movieActions} from "../../redux";
 
@@ -24,6 +23,7 @@ const PositionSticky = styled(Paper)(({theme}) => ({
 
 const Home: FC = () => {
     const {page} = useAppSelector(state => state.movieReducer)
+    const {genres} = useAppSelector((state) => state.genreReducer)
     const dispatch = useAppDispatch()
     console.log('home', page)
     useEffect(() => {

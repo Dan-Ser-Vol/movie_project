@@ -35,7 +35,9 @@ const slice = createSlice({
     reducers: {},
     extraReducers: builder => builder
         .addCase(getAll.fulfilled, (state:IState, action:PayloadAction<IGenre[]>)=>{
+            console.log(action.payload)
             state.genres = action.payload
+
         })
 
 })

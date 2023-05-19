@@ -4,30 +4,31 @@ import {Box, Card, CardContent, CardMedia, Typography, useTheme} from '@mui/mate
 import {useNavigate} from "react-router-dom";
 
 import {IMovie} from "../../interfaces";
-import {useAppDispatch} from "../../hooks";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 import {movieActions} from "../../redux";
-import {genres} from "../../utils/differentData";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 interface IProps {
     movie: IMovie
 }
 
 const MovieCard: FC<IProps> = ({movie}) => {
+    const {genres} = useAppSelector((state) => state.genreReducer)
     const theme = useTheme()
     const dispatch = useAppDispatch();
     const navigate = useNavigate()
 
 
-    const otherUrls ='https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg'
-    const imgUrl = movie.backdrop_path? `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`: otherUrls
+    const otherUrls = 'https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483296.jpg'
+    const imgUrl = movie.backdrop_path ? `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}` : otherUrls
 
     const genreTitle = genres.map(item => {
-            if (movie.genre_ids.includes(item.id)) {
-                return item.name;
-            }else {
-                return null
-            }
-        })
+        if (movie.genre_ids.includes(item.id)) {
+            return item.name;
+        } else {
+            return null
+        }
+    })
         .filter(name => name !== undefined)
         .join(" ");
 
@@ -56,8 +57,30 @@ const MovieCard: FC<IProps> = ({movie}) => {
                     {genreTitle}
                 </Typography>
                 <Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                        <Typography variant="h6">Rating: {movie.vote_average}</Typography>
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        position: 'relative'
+                    }}>
+                        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                            <Typography variant="h6">Rating: {movie.vote_average}</Typography>
+                        </Box>
+                        <Typography mb={2}
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        position: 'absolute',
+                                        right: 0,
+                                        top: 3,
+                                    }} variant={'h5'}
+
+                        >
+                            <ThumbUpIcon/>
+                            {movie.vote_count}
+                        </Typography>
+
                     </Box>
                     <Rating defaultValue={movie.vote_average} max={10}/>
                 </Box>

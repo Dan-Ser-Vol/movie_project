@@ -3,7 +3,6 @@ import {Box, Button, Grid, Paper, Typography, useTheme} from "@mui/material";
 import {IMovie} from "../../interfaces";
 import {MyRating} from "../Rating";
 import {BackButton} from "../BackButton";
-import {genres} from "../../utils/differentData";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {movieActions} from "../../redux";
@@ -16,15 +15,17 @@ interface IProps {
 }
 
 const MovieInfo: FC<IProps> = ({movie}) => {
+    const {genres} = useAppSelector((state) => state.genreReducer)
     const [page, setPage] = React.useState<number>(1);
     const [id, setId] = React.useState<number>(1);
     const {results, totalPages} = useAppSelector(state => state.movieReducer)
+    const dispatch = useAppDispatch()
 
     useEffect(()=> {
         dispatch(movieActions.selectByGenre({id, page}))
-    }, [page])
+    }, [id, page, dispatch])
 
-const dispatch = useAppDispatch()
+
 
     const findGenres = genres.filter(item =>  movie.genre_ids.includes(item.id))
     const releaseDate = movie.release_date?.replace(/-/g, ' ').replace('-', ' ');
