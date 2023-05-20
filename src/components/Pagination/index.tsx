@@ -22,7 +22,7 @@ const PaginationControlled:FC<IProps> = ({ page ,setPage, totalPages}) => {
             <Typography variant={"h5"} mt={2} color={"gray"} fontWeight={"bold"}>Page: {page}</Typography>
       <Box>
           <Pagination
-              count={totalPages}
+              count={totalPages<500? totalPages : 500}
               page={page}
               onChange={handleChange}
               variant="outlined"

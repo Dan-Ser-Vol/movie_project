@@ -12,16 +12,8 @@ const GenreFilter: React.FC = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        const fetchGenres = async () => {
-            try {
-                dispatch(genreActions.getAll())
-                dispatch(movieActions.selectByGenre({id, page}))
-            } catch (error) {
-                console.error('Error fetching genres:', error);
-            }
-        };
-        fetchGenres();
-    }, [dispatch, page]);
+        dispatch(genreActions.getAll())
+    }, [id, dispatch, page]);
 
     const handleGenreClick = (id: number) => {
         dispatch(movieActions.selectByGenre({id, page}))

@@ -1,43 +1,49 @@
 import {useEffect, useState} from 'react';
 import {IMovie} from '../../interfaces';
-import {MovieInfo} from '../MovieInfo';
+import {MovieInfo} from '../MovieItem';
 import {Grid} from "@mui/material";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {movieActions} from "../../redux";
 
 const MovieDetails = () => {
     const [movie, setMovie] = useState<IMovie | null>(null);
+    const {videos} = useAppSelector((state) => state.movieReducer)
+    const dispatch = useAppDispatch()
+
+    const sliceVideos = videos?.slice(0, 2);
 
 
     useEffect(() => {
         const storedMovies = localStorage.getItem('movies');
         if (storedMovies) {
             const parsedMovies: IMovie = JSON.parse(storedMovies);
+            dispatch(movieActions.getVideoById(parsedMovies.id))
             setMovie(parsedMovies)
         }
-    }, []);
+    }, [dispatch]);
 
-    const youtubeUrl = `https://www.youtube.com/watch?v=eX0KjDFvDAY`;
 
     return (
-        <Grid container spacing={2} sx={{height: '100vh', display:  'flex', marginTop: '20px',flexDirection: 'column'}}>
-            <Grid item sx={{height: '100vh'}}>
+        <Grid container spacing={2} sx={{height: '100%', display:  'flex', marginTop: '20px'}}>
+            <Grid md={12} item sx={{height: '60%'}}>
                 {
                     movie && <MovieInfo movie={movie}/>
                 }
             </Grid>
-            {/*<Grid item >*/}
-            {/*    <iframe*/}
-            {/*        width="560"*/}
-            {/*        height="315"*/}
-            {/*        src={`https://www.youtube.com/embed/eX0KjDFvDAY`}*/}
-            {/*        title={'name'}*/}
-            {/*        // frameBorder="0"*/}
-            {/*        allowFullScreen*/}
-            {/*    ></iframe>*/}
-
-            {/*    <a href={youtubeUrl} target="_blank" rel="noopener noreferrer">*/}
-            {/*        Watch Trailer on YouTube*/}
-            {/*    </a>*/}
-            {/*</Grid>*/}
+            {
+                sliceVideos && sliceVideos.map(video=>(
+                    <Grid key={video.key} md={6} xs={12} item  sx={{ display: "flex",height: '60%', marginTop: '50px'}} >
+                        <iframe
+                            width="100%"
+                            height="315"
+                            src={`https://www.youtube.com/embed/${video.key}`}
+                            title={'name'}
+                            // frameBorder="0"
+                            allowFullScreen
+                        ></iframe>
+                    </Grid>
+                ))
+            }
 
         </Grid>
     );

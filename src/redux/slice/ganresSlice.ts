@@ -8,11 +8,13 @@ import {AxiosError} from "axios";
 interface IState {
     genres: IGenre[]
     selectedGenre: IGenre |null
+    arrayId: number []
 }
 
 const initialState: IState = {
     genres: [],
-    selectedGenre: null
+    selectedGenre: null,
+    arrayId: []
 }
 
 
@@ -32,14 +34,18 @@ const getAll = createAsyncThunk<IGenre[], void>('genreSlice/getAll', async (_,{r
 const slice = createSlice({
     name: "genreSlice",
     initialState,
-    reducers: {},
+    reducers: {
+        setGenreId: (state, action) => {
+            state.arrayId.push(action.payload)
+        },
+        deleteGenreId: (state, action) => {
+            state.arrayId = state.arrayId.filter((id) => id !== action.payload);
+        }
+    },
     extraReducers: builder => builder
         .addCase(getAll.fulfilled, (state:IState, action:PayloadAction<IGenre[]>)=>{
-            console.log(action.payload)
             state.genres = action.payload
-
         })
-
 })
 
 

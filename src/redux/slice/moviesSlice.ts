@@ -1,13 +1,23 @@
 import {
     createAsyncThunk,
     createSlice,
-    isFulfilled, isPending,
+    isFulfilled,
+    isPending,
     isRejectedWithValue,
     PayloadAction
 } from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
-import {IError, IMovie, IMovieResponse} from "../../interfaces";
+import {
+    IError,
+    IGenreArrayIdAndPage,
+    IGenreIdAndPage,
+    IMovie,
+    IMovieInfo,
+    IMovieResponse,
+    IVideo,
+    IVideoResponse
+} from "../../interfaces";
 import movieService from "../../services/movie.service";
 
 
@@ -21,12 +31,10 @@ interface IState {
     isLoading: boolean
     selectedMovies: IMovie[]
     isExist: number
+    videos:IVideo[] | null
+    movieInfo: IMovieInfo | null
 }
 
-interface IGenreIdAndPage {
-    id:number
-    page:number
-}
 
 const initialState: IState = {
     page: 1,
@@ -37,7 +45,10 @@ const initialState: IState = {
     errors: null,
     isLoading: false,
     selectedMovies: [],
-    isExist: 0
+    isExist: 0,
+    videos:null,
+    movieInfo : null
+
 };
 
 const getAll = createAsyncThunk<IMovieResponse, number, { rejectValue: AxiosError<unknown, any> }>(
@@ -54,7 +65,9 @@ const getAll = createAsyncThunk<IMovieResponse, number, { rejectValue: AxiosErro
     }
 );
 
-const search = createAsyncThunk<IMovieResponse, string>('moviesSlice/search', async (str, {rejectWithValue}) => {
+const search = createAsyncThunk<IMovieResponse, string>(
+    'moviesSlice/search',
+    async (str, {rejectWithValue}) => {
     try {
         return await movieService.searchMovie(str);
 
@@ -68,7 +81,7 @@ const search = createAsyncThunk<IMovieResponse, string>('moviesSlice/search', as
 
 
 const selectByGenre = createAsyncThunk<IMovieResponse, IGenreIdAndPage>(
-    'moviesSlice/select',
+    'moviesSlice/selectByGenre',
     async ({id, page}, { rejectWithValue }) => {
         try {
             return await movieService.searchMoviesByGenre(id, page);
@@ -81,8 +94,23 @@ const selectByGenre = createAsyncThunk<IMovieResponse, IGenreIdAndPage>(
     }
 );
 
+const selectByArrGenre = createAsyncThunk<IMovieResponse, IGenreArrayIdAndPage>(
+    'moviesSlice/selectByArrGenre',
+    async ({arrayId, page}, { rejectWithValue }) => {
+        try {
+            return await movieService.searchMoviesByArrayGenre(arrayId, page);
+        } catch (e) {
+            if (e instanceof AxiosError) {
+                return rejectWithValue(e);
+            }
+            throw e;
+        }
+    }
+);
+
+
 const selectByYear = createAsyncThunk<IMovieResponse, number>(
-    'moviesSlice/select',
+    'moviesSlice/selectByYear',
     async ( year, { rejectWithValue }) => {
         try {
             return await movieService.searchMoviesByYear(year);
@@ -94,6 +122,32 @@ const selectByYear = createAsyncThunk<IMovieResponse, number>(
         }
     }
 );
+
+const  getVideoById = createAsyncThunk<IVideoResponse, number>(
+    'moviesSlice/getVideoById',
+        async (id:number, { rejectWithValue }) => {
+            try {
+                return await movieService.videoById(id)
+            } catch (e) {
+                if (e instanceof AxiosError) {
+                    return rejectWithValue(e);
+                }
+                throw e;
+            }
+        })
+
+const  getMovieInfoById = createAsyncThunk<IMovieInfo, number>(
+    'moviesSlice/getMovieInfoById',
+    async (id:number, { rejectWithValue }) => {
+        try {
+            return await movieService.getMovieById(id)
+        } catch (e) {
+            if (e instanceof AxiosError) {
+                return rejectWithValue(e);
+            }
+            throw e;
+        }
+    })
 
 const slice = createSlice({
     name: "moviesSlice",
@@ -117,26 +171,35 @@ const slice = createSlice({
 
     extraReducers: (builder) =>
         builder
-            .addMatcher(isFulfilled(search, getAll, selectByGenre, selectByYear),
-                (state: IState, action: PayloadAction<IMovieResponse>) => {
+            .addCase(getVideoById.pending, (state:IState)=>{
+                state.isLoading = true
+            })
+            .addCase(getMovieInfoById.pending, (state:IState)=>{
+                state.isLoading = true
+            })
+            .addCase(getMovieInfoById.fulfilled, (state:IState, action:PayloadAction<IMovieInfo>)=>{
+                state.isLoading = false
+                state.movieInfo = action.payload
+            })
+            .addCase(getVideoById.fulfilled, (state:IState, action:PayloadAction<IVideoResponse>)=>{
+                state.videos = action.payload.results
+                state.isLoading = false
+            })
+            .addMatcher(isFulfilled(search, getAll, selectByGenre, selectByArrGenre, selectByYear),
+                (state: IState, action:PayloadAction<IMovieResponse>) => {
                 state.page = action.payload.page;
                 state.totalPages = action.payload.total_pages;
                 state.totalResults = action.payload.total_results;
                 state.results = action.payload.results;
-
+                    state.isLoading = false
+                    state.errors = null;
             })
-            .addMatcher(isPending(search, getAll, selectByGenre, selectByYear),(state: IState) => {
+            .addMatcher(isPending(search, getAll, selectByGenre, selectByArrGenre, selectByYear),(state: IState) => {
                 state.isLoading = true
                 state.errors = null;
             } )
             .addMatcher(
-                isFulfilled(getAll, search, selectByGenre, selectByYear),
-                (state: IState) => {
-                    state.isLoading = false
-                    state.errors = null;
-                })
-            .addMatcher(
-                isRejectedWithValue(getAll, search, selectByGenre, selectByYear),
+                isRejectedWithValue(getAll, search, selectByGenre, selectByArrGenre,selectByYear),
                 (state: IState, action: PayloadAction<any>) => {
                     state.errors = action.payload;
                     state.isLoading = false
@@ -145,6 +208,16 @@ const slice = createSlice({
 });
 
 const {actions, reducer: movieReducer} = slice;
-const movieActions = {...actions, getAll, search, selectByGenre, selectByYear};
+const movieActions = {...actions,
+    getAll,
+    search,
+    selectByGenre,
+    selectByYear,
+    selectByArrGenre,
+    getVideoById,
+    getMovieInfoById
+    }
 
-export {movieActions, movieReducer};
+
+
+export {movieActions, movieReducer, };

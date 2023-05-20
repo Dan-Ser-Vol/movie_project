@@ -34,11 +34,11 @@ const darkTheme = createTheme({
             main: '#548c89',
         },
         background: {
-            default: '#FFFFFF',
+            default: '#376673',
         },
         text: {
             primary: '#FDC998',
-            secondary: '#F0F0F0',
+            secondary: '#de883c',
         },
 
     },

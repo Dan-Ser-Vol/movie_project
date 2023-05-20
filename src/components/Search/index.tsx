@@ -14,7 +14,6 @@ const MySearch = () => {
     const dispatch = useAppDispatch()
 
     const inputHandler = () => {
-
         dispatch(movieActions.search(value))
         setValue('')
     }

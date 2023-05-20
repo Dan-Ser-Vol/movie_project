@@ -18,10 +18,7 @@ const YearsInput = () => {
     }
 
     useEffect(() => {
-        const selectByYear = async () => {
-            await dispatch(movieActions.selectByYear(+value));
-        };
-        selectByYear();
+        dispatch(movieActions.selectByYear(+value));
     }, [dispatch, value]);
 
     const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {

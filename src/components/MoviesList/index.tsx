@@ -1,27 +1,27 @@
-import {FC, useEffect} from 'react';
+import * as React from 'react';
+import {FC} from 'react';
 import {Box, Grid} from "@mui/material";
-import * as React from "react";
 
 import {movieActions} from "../../redux";
 import {MovieCard} from "../MovieCard";
 import {PaginationControlled} from "../Pagination";
 import {MyLoader} from "../Loader";
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import {useAppDispatch} from "../../hooks";
+import {IMovie} from "../../interfaces";
 
 
 interface IProps {
+    results: IMovie[],
+    isLoading: boolean,
+    totalPages: number,
+    page: number
 }
 
-const MoviesList: FC<IProps> = () => {
-    const {results, isLoading, totalPages, page} = useAppSelector((state) => state.movieReducer);
+const MoviesList: FC<IProps> = ({results, isLoading, totalPages, page}) => {
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-    }, [dispatch ,page]);
-
-
-    const setPages =  (pages:number) => {
-        dispatch( movieActions.setPage(pages))
+    const setPages = (pages: number) => {
+        dispatch(movieActions.setPage(pages))
     }
 
     return (
@@ -29,7 +29,7 @@ const MoviesList: FC<IProps> = () => {
             {
                 isLoading ?
                     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
-                    <MyLoader />
+                        <MyLoader/>
                     </Box>
                     :
                     <Grid container spacing={1}>
@@ -40,7 +40,6 @@ const MoviesList: FC<IProps> = () => {
                         ))}
                     </Grid>
             }
-
             <Box>
                 <PaginationControlled page={page} setPage={setPages} totalPages={totalPages}/>
             </Box>
