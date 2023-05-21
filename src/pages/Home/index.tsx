@@ -25,8 +25,10 @@ const Home: FC = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if(!isFilterResult){
+        if(isFilterResult === ''){
             dispatch(movieActions.getAll(page))
+        }else {
+            return
         }
     }, [dispatch, page, isFilterResult]);
 

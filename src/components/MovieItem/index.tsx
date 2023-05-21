@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {Box, Button, Grid, Paper, Typography, useTheme} from "@mui/material";
 import {IMovie} from "../../interfaces";
 import {MyRating} from "../Rating";
@@ -14,16 +14,10 @@ interface IProps {
 }
 
 const MovieInfo: FC<IProps> = ({movie}) => {
+
     const {genres} = useAppSelector((state) => state.genreReducer)
-    const [page] = React.useState<number>(1);
-    const [genreId, setId] = React.useState<number>(1);
-    const {results} = useAppSelector(state => state.movieReducer)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-
-    useEffect(()=> {
-        dispatch(movieActions.selectByGenre({genreId, page}))
-    }, [genreId, page, dispatch, genres, results])
 
     const findGenres = genres.filter(item =>  movie.genre_ids.includes(item.id))
     const releaseDate = movie.release_date?.replace(/-/g, ' ').replace('-', ' ');
@@ -32,8 +26,8 @@ const MovieInfo: FC<IProps> = ({movie}) => {
     const imgUrl = movie.poster_path? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`: otherUrls
 
     const findGenre =  (id:number) => {
-        dispatch(movieActions.selectByGenre({genreId, page}))
-        setId(id)
+        dispatch(movieActions.setGenreId(id))
+        dispatch(movieActions.setIsFilterResults('byGenre'))
         navigate('/')
     }
     const handleClick = () => {

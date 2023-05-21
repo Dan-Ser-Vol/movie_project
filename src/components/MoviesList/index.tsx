@@ -29,7 +29,7 @@ const MoviesList: FC<IProps> = ({
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if(!isFilterResult){
+        if(isFilterResult === ''){
             dispatch(movieActions.getAll(page))
         }if(  isFilterResult === 'byGenre') {
             dispatch(movieActions.selectByGenre({genreId, page}))

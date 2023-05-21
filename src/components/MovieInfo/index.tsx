@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const MovieInfo: FC<IProps> = () => {
-    const {movieInfo, page} = useAppSelector(state => state.movieReducer)
+    const {movieInfo} = useAppSelector(state => state.movieReducer)
     const theme = useTheme()
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
@@ -25,7 +25,8 @@ const MovieInfo: FC<IProps> = () => {
     }, [dispatch, parsedId]);
 
     const handleGenreClick = (genreId: number) => {
-        dispatch(movieActions.selectByGenre({genreId, page}))
+        dispatch(movieActions.setGenreId(genreId))
+        dispatch(movieActions.setIsFilterResults('byGenre'))
         navigate('/')
 
     };
