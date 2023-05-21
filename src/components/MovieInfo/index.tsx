@@ -24,8 +24,8 @@ const MovieInfo: FC<IProps> = () => {
         }
     }, [dispatch, parsedId]);
 
-    const handleGenreClick = (id: number) => {
-        dispatch(movieActions.selectByGenre({id, page}))
+    const handleGenreClick = (genreId: number) => {
+        dispatch(movieActions.selectByGenre({genreId, page}))
         navigate('/')
 
     };

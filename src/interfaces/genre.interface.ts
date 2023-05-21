@@ -4,7 +4,7 @@ export interface IGenre {
 }
 
 export interface IGenreIdAndPage {
-    id: number
+    genreId: number
     page: number
 }
 

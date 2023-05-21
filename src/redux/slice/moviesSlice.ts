@@ -23,14 +23,14 @@ import movieService from "../../services/movie.service";
 
 interface IState {
     page: number;
-    trigger: boolean;
+    isFilterResult: string;
     results: IMovie[];
     totalPages: number;
     totalResults: number | null;
     errors: IError | null;
     isLoading: boolean
     selectedMovies: IMovie[]
-    isExist: number
+    genreId: number
     videos:IVideo[] | null
     movieInfo: IMovieInfo | null
 }
@@ -39,13 +39,13 @@ interface IState {
 const initialState: IState = {
     page: 1,
     results: [],
-    trigger: true,
+    isFilterResult: '',
     totalPages: 0,
     totalResults: null,
     errors: null,
     isLoading: false,
     selectedMovies: [],
-    isExist: 0,
+    genreId: 0,
     videos:null,
     movieInfo : null
 
@@ -82,9 +82,9 @@ const search = createAsyncThunk<IMovieResponse, string>(
 
 const selectByGenre = createAsyncThunk<IMovieResponse, IGenreIdAndPage>(
     'moviesSlice/selectByGenre',
-    async ({id, page}, { rejectWithValue }) => {
+    async ({genreId, page}, { rejectWithValue }) => {
         try {
-            return await movieService.searchMoviesByGenre(id, page);
+            return await movieService.searchMoviesByGenre(genreId, page);
         } catch (e) {
             if (e instanceof AxiosError) {
                 return rejectWithValue(e);
@@ -164,8 +164,11 @@ const slice = createSlice({
             const movieIndex = state.selectedMovies.findIndex((value) => value.id === action.payload);
             state.selectedMovies.splice(movieIndex, 1);
         },
-        setIsExist: (state: IState, action: PayloadAction<number>) => {
-            state.isExist = action.payload
+        setIsFilterResults: (state: IState, action: PayloadAction<string>) => {
+            state.isFilterResult = action.payload
+        },
+        setGenreId: (state,action:PayloadAction<number>)=>{
+            state.genreId = action.payload
         }
     },
 
@@ -177,15 +180,23 @@ const slice = createSlice({
             .addCase(getMovieInfoById.pending, (state:IState)=>{
                 state.isLoading = true
             })
-            .addCase(getMovieInfoById.fulfilled, (state:IState, action:PayloadAction<IMovieInfo>)=>{
+            .addCase(getAll.fulfilled, (state:IState, action:PayloadAction<IMovieResponse>)=>{
+                state.page = action.payload.page;
+                state.totalPages = action.payload.total_pages;
+                state.totalResults = action.payload.total_results;
+                state.results = action.payload.results;
                 state.isLoading = false
-                state.movieInfo = action.payload
+                state.errors = null;
             })
+            .addCase(getMovieInfoById.fulfilled, (state:IState, action:PayloadAction<IMovieInfo>)=>{
+            state.isLoading = false
+            state.movieInfo = action.payload
+        })
             .addCase(getVideoById.fulfilled, (state:IState, action:PayloadAction<IVideoResponse>)=>{
                 state.videos = action.payload.results
                 state.isLoading = false
             })
-            .addMatcher(isFulfilled(search, getAll, selectByGenre, selectByArrGenre, selectByYear),
+            .addMatcher(isFulfilled(search, selectByGenre, selectByArrGenre, selectByYear),
                 (state: IState, action:PayloadAction<IMovieResponse>) => {
                 state.page = action.payload.page;
                 state.totalPages = action.payload.total_pages;

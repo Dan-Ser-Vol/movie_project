@@ -21,12 +21,15 @@ const PositionSticky = styled(Paper)(({theme}) => ({
 
 const Home: FC = () => {
     const {genres} = useAppSelector((state) => state.genreReducer)
-    const {results, isLoading, totalPages, page} = useAppSelector((state) => state.movieReducer);
+    const {results, isLoading, totalPages, page, isFilterResult} = useAppSelector((state) => state.movieReducer);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(movieActions.getAll(page))
-    }, [dispatch, page]);
+        if(!isFilterResult){
+            dispatch(movieActions.getAll(page))
+        }
+    }, [dispatch, page, isFilterResult]);
+
 
 
     return (
