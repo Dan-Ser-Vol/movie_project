@@ -7,34 +7,32 @@ import {MovieCard} from "../MovieCard";
 import {PaginationControlled} from "../Pagination";
 import {MyLoader} from "../Loader";
 import {useAppDispatch, useAppSelector} from "../../hooks";
-import {IMovie} from "../../interfaces";
 
 
-interface IProps {
-    results: IMovie[],
-    isLoading: boolean,
-    totalPages: number,
-    page: number
-}
 
-const MoviesList: FC<IProps> = ({
-                                    results,
-                                    isLoading,
-                                    totalPages,
-                                    page,
-}) => {
 
-    const {isFilterResult, genreId} = useAppSelector((state => state.movieReducer))
+const MoviesList: FC = () => {
+
+    const {results, isLoading, totalPages, page, isFilterResult, genreId} = useAppSelector((state) => state.movieReducer);
 
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if(isFilterResult === ''){
-            dispatch(movieActions.getAll(page))
-        }if(  isFilterResult === 'byGenre') {
+        if(  isFilterResult === 'byGenre1') {
+            console.log('list')
             dispatch(movieActions.selectByGenre({genreId, page}))
         }
-    }, [page,isFilterResult, genreId]);
+        if(  isFilterResult === 'byGenre2') {
+            console.log('list')
+            dispatch(movieActions.selectByGenre({genreId, page}))
+        }
+        if(  isFilterResult === 'byGenre') {
+            console.log('list')
+            dispatch(movieActions.selectByGenre({genreId, page}))
+        }else {
+            dispatch(movieActions.getAll(page))
+        }
+    }, [dispatch, page,isFilterResult, genreId]);
 
 
     const setPages = (pages: number) => {

@@ -15,7 +15,7 @@ const GenreFilter: React.FC = () => {
 
     const handleGenreClick = (id: number) => {
         dispatch(movieActions.setGenreId(id))
-        dispatch(movieActions.setIsFilterResults('byGenre'))
+        dispatch(movieActions.setIsFilterResults('byGenre1'))
     };
 
     return (

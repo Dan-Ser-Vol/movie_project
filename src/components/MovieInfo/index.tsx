@@ -3,7 +3,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {movieActions} from "../../redux";
 import {Box, Button, Grid, Link, Paper, Typography, useTheme} from "@mui/material";
-import {MyRating} from "../Rating";
 
 interface IProps {
 
@@ -26,7 +25,7 @@ const MovieInfo: FC<IProps> = () => {
 
     const handleGenreClick = (genreId: number) => {
         dispatch(movieActions.setGenreId(genreId))
-        dispatch(movieActions.setIsFilterResults('byGenre'))
+        dispatch(movieActions.setIsFilterResults('byGenre2'))
         navigate('/')
 
     };
@@ -160,7 +159,13 @@ const MovieInfo: FC<IProps> = () => {
                     </Typography>
                     </Box>
 
-                    <MyRating rating={movieInfo.vote_average}/>
+                    <Box sx={{fontSize: '18px', color: '#FF6C37', display: 'flex'}}>
+                        Rating:
+                        <Typography
+                            sx={{marginLeft: '10px', color: '#CAC198'}}>
+                            {movieInfo.vote_average}
+                        </Typography>
+                    </Box>
 
                     <Box sx={{
                         mt: 2, display: 'flex',

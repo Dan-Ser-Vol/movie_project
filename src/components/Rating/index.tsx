@@ -10,7 +10,7 @@ interface IProps {
 
 const MyRating:FC<IProps> = ({rating}) => {
     return (
-        <Box>
+        <Box sx = {{ padding: '10px'}} >
             <Rating name="customized-10" defaultValue={rating} max={20} />
         </Box>
     );

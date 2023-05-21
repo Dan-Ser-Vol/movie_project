@@ -46,11 +46,11 @@ const MovieInfo: FC<IProps> = ({movie}) => {
                             </Paper>
                         </Grid>
                         <Grid item md={7} xs={12} color={theme.palette.text.primary} sx={{position: 'relative'}}>
-                            <Typography mb={2} variant={'h4'}>{movie?.title}</Typography>
-                            <Typography  mb={2} variant={'h5'}> {movie.overview}</Typography>
-                            <Typography variant={'body1'}>Date: {releaseDate}</Typography>
-                            <Typography variant={'body1'}>Language: {movie.original_language}</Typography>
-                            <Typography variant={'body1'}>Popularity: {movie.popularity}</Typography>
+                            <Typography   mb={2} variant={'h4'}>{movie?.title}</Typography>
+                            <Typography    mb={2} variant={'h5'}> {movie.overview}</Typography>
+                            <Typography  mb={1}  variant={'body1'}>Date: {releaseDate}</Typography>
+                            <Typography  mb={1}  variant={'body1'}>Language: {movie.original_language}</Typography>
+                            <Typography  mb={1}  variant={'body1'}>Popularity: {movie.popularity}</Typography>
                             {
                                 findGenres && findGenres.map(genre => <Button
                                 key={genre.id}
